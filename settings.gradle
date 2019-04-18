@@ -1,0 +1,4 @@
+rootProject.name = 'cas-rest-client-auto-configuration'
+include ':cas-rest-client-spring-boot-autoconfigure'
+include ':cas-rest-client-spring-boot-starter'
+include ':cas-rest-client-sample'
