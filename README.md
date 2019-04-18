@@ -1,0 +1,1 @@
+# cas-rest-client-auto-configuration
