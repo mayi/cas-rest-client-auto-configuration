@@ -1,0 +1,46 @@
+buildscript {
+    ext {
+        depedencyManagementVersion = '1.0.6.RELEASE'
+    }
+    repositories {
+        maven { url 'https://repo.spring.io/plugins-release' }
+    }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:$depedencyManagementVersion")
+    }
+}
+
+allprojects {
+    def gitVersion = { ->
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            ignoreExitValue true
+            commandLine 'git', 'describe', '--tags', '--abbrev=0', '--match', 'v[[:digit:]]*\\.[[:digit:]]*\\.[[:digit:]]*'
+            standardOutput = stdout
+        }
+        def version = stdout.toString().trim()
+        return !version.isEmpty() ? version - 'v' : '1.0.0-SNAPSHOT'
+    }
+
+    group = "io.test"
+    version = gitVersion()
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        jcenter()
+    }
+
+    ext {
+        springBootVersion = '1.5.20.RELEASE'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        }
+    }
+}
